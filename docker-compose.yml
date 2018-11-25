@@ -18,6 +18,17 @@ services:
       - ./data/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD:postgres
+  
+  elasticsearch:
+    restart: 'no'
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
     
   mongo-cli:
     restart: 'no'
@@ -49,7 +60,19 @@ services:
     command: ["/wait-for-it.sh", "mongo:27017", "--", "/docker-entrypoint.sh"]
 
   adminer:
-    image: adminer
     restart: 'no'
+    image: adminer
     ports:
       - 8080:8080
+    depends_on:
+      - postgres
+
+  kibana:
+    restart: 'no'
+    image: docker.elastic.co/kibana/kibana:6.5.1
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200

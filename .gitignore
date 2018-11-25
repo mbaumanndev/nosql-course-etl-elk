@@ -74,3 +74,4 @@ $RECYCLE.BIN/
 
 data/mongo/*
 data/postgres/*
+data/elasticsearch/*
