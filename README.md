@@ -133,4 +133,4 @@ Nous avons fait le tour de l'IHM et créé un projet comprenant un premier Job T
 
 Dans un premier temps, nous allons ouvrir un fichier CSV afin d'en extraire des données, que nous allons importer dans notre PostgreSQL ainsi que dans notre MongoDB.
 
-Le jeu de données utilisé provient du site [DataHub](https://datahub.io/world-bank/tx.val.tech.cd).
+Le jeu de données utilisé, situé dans le répertoire `data/raw`, provient du site [DataHub](https://datahub.io/world-bank/tx.val.tech.cd).

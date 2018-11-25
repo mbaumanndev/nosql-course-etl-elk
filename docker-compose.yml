@@ -3,7 +3,7 @@ version: '3.4'
 services:
   mongo:
     restart: 'no'
-    image: mongo:4.0.4-xenial
+    image: mongo:3.2
     ports:
       - 27017:27017
     volumes:
@@ -32,7 +32,7 @@ services:
     
   mongo-cli:
     restart: 'no'
-    image: mongo:4.0.4-xenial
+    image: mongo:3.2
     depends_on:
       - mongo
     command: >
