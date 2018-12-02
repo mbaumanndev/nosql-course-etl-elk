@@ -15,6 +15,8 @@ ETL et ELK
     - [La palette](#la-palette)
     - [Fenêtre d'éxécution](#fen%C3%AAtre-d%C3%A9x%C3%A9cution)
   - [Notre premier job Talend](#notre-premier-job-talend)
+  - [Talend et NoSQL](#talend-et-nosql)
+- [Brève introduction à ELK](#br%C3%A8ve-introduction-%C3%A0-elk)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -134,3 +136,90 @@ Nous avons fait le tour de l'IHM et créé un projet comprenant un premier Job T
 Dans un premier temps, nous allons ouvrir un fichier CSV afin d'en extraire des données, que nous allons importer dans notre PostgreSQL ainsi que dans notre MongoDB.
 
 Le jeu de données utilisé, situé dans le répertoire `data/raw`, provient du site [DataHub](https://datahub.io/world-bank/tx.val.tech.cd).
+
+Nous allons faire un premier job qui va permettre d'importer des données issues d'un fichier CSV dans un PostgreSQL en découpant convenablement les données.
+
+À la fin, le job ressemblera à ceci :
+
+![Job importation CSV vers PostgreSQL](images/etude/job1.png)
+
+> À nous de jouer !
+>
+> Nous allons maintenant passer en séance guidée, ou nous allons mettre en place, ensemble, ce premier job Talend.
+
+### Talend et NoSQL
+
+Maintenant que notre importation dans PostgreSQL est terminée, nous allons faire un nouveau job Talend, qui va récupérer les données depuis PostgreSQL afin de les insérées dans un serveur MongoDB.
+
+Nous structurerons nos documents MongoDB de la façon suivante :
+
+- Année
+- Exports :
+  - Pays :
+    - Code
+    - Nom
+  - Montant des exportation
+
+Ou en JSON :
+
+```json
+{
+    "Year": "1988",
+    "Exports": [
+        {
+            "Country": {
+                "Code": "AUS",
+                "Name": "Australia"
+            },
+            "Amount": "4.14725504E8"
+        },
+        {
+            "Country": {
+                "Code": "AUT",
+                "Name": "Austria"
+            },
+            "Amount": "2.16221133E9"
+        },
+        ...
+    ]
+}
+```
+
+Chaque document représentera les exports d'une année, rangés par pays.
+
+À la fin, notre job Talend ressemblera à ceci :
+
+![Job Talend PostgreSQL vers MongoDB](images/etude/job2.png)
+
+> À nous de jouer !
+>
+> En séance guidée, nous allons faire la mise en place de ce nouveau job.
+>
+> Vous trouverez en dessous trois captures d'écran de paramétrage de MongoDB qui risquent de ne pas passer au rétro-projecteur à cause des tailles d'écran.
+
+Paramétrage output mongo basique :
+
+![Paramétrage output mongo basique](images/etude/param1.png)
+
+Paramétrage output mongo avancé :
+
+![Paramétrage output mongo avancé](images/etude/param2.png)
+
+Paramétrage JSON de Mongo :
+
+![Paramétrage JSON de Mongo](images/etude/mapping-mongo.png)
+
+Brève introduction à ELK
+------------------------
+
+La Stack ELK regroupe divers logiciels, et tient son noms des pricipaux logiciels la composant depuis le début : Elasticsearch, Logstash et Kibana.
+
+Depuis quelques temps, la société maintenant ces différents logiciels en propose d'autres, complémentaires à cette suite, permettant de récolter d'avantages de métriques aux origines diverses (comme celles concernant votre réseau interne, votre utilisation matérielle, etc).
+
+La stack ELK est très populaire pour l'analyse de données/métriques en tout genre. Elle permet de récolter beaucoup de données de logs ou d'autres sources via Logstash, qui va les envoyer vers Elasticsearch. Elasticsearch va se charger de ranger ces données et de les stockées de la façon la plus efficace possible. Ensuite, on a Kibana pour mettre ces données sous forme graphique.
+
+Elasticsearch n'est pas le premier SGBD à proposer ce genre de services, on en trouve de nombreux autres, mais sa spécificité est qu'il est très bin intégré à une grande suite logicielle.
+
+On pourra citer Solr comme SGBD connexe, Elasticsearch et Solr étant tout deux basés sur Lucene.
+
+Afin de poursuivre ce cours, qui a pour but de montrer ce qu'il est possible de faire avec Elasticsearch et Kibana, nous allons ouvrir une [instance locale de Kibana](http://localhost:5601/) et parcourir ses différentes fonctionnalités.
